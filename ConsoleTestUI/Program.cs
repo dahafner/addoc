@@ -1,4 +1,5 @@
 ﻿using Addoc.Shared.Logic;
+using Addoc.UI.Shared;
 using System;
 using System.Collections.Generic;
 
@@ -11,17 +12,19 @@ namespace ConsoleTestUI
             Console.WriteLine("ListAllGroupsViaTokenGroups:");
 
             var result = new List<string>();
+            var creds = new Credentials { DomainName = "home.local", Username = "maintenance", Password = "Guguseli123" };
+            var searcher = new ActiveDirectorySearcher(creds);
 
             try
             {
-                var groups = ActiveDirectorySearchers.GetGroups("home.local", "bla");
+                var groups = searcher.GetGroups( "bla");
 
-                result = ActiveDirectorySearchers.GetAllOUs("home.local");
+                result = searcher.GetAllOUs();
 
                 foreach (var group in result)
                 {
                     Console.WriteLine($" --- {group} ---");
-                    var users = ActiveDirectorySearchers.GetUsersFromUnit("home.local", group);
+                    var users = searcher.GetUsersFromUnit(group);
                     foreach (var user in users)
                     {
                         Console.WriteLine(user.DisplayName);
